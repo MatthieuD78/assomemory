@@ -1,0 +1,50 @@
+﻿generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Association {
+  id            String   @id @default(uuid())
+  name          String
+  siret         String   @unique
+  email         String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  users         User[]
+  documents     Document[]
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  name          String
+  role          String   @default("MEMBER")
+  associationId String?
+  association   Association? @relation(fields: [associationId], references: [id])
+  createdAt     DateTime @default(now())
+}
+
+model Document {
+  id            String   @id @default(uuid())
+  title         String
+  type          String
+  url           String
+  associationId String
+  association   Association @relation(fields: [associationId], references: [id])
+  uploadedAt    DateTime @default(now())
+  vectorized    Boolean  @default(false)
+}
+
+model ChatMessage {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  question      String
+  answer        String
+  createdAt     DateTime @default(now())
+}

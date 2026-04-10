@@ -1,0 +1,19 @@
+assomemory/
+├── package.json
+├── prisma/
+│   └── schema.prisma
+├── lib/
+│   ├── gemini/
+│   │   └── embeddings.js
+│   └── qdrant/
+│       └── client.js
+├── app/
+│   ├── api/
+│   │   └── rag/
+│   │       └── ask/
+│   │           └── route.js
+│   └── dashboard/
+│       └── assos/
+│           └── chat/
+│               └── page.js
+└── .gitignore

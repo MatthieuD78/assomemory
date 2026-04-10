@@ -19,9 +19,6 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.24",
-    "tailwindcss": "^3.3.0",
     "prisma": "^5.22.0"
   }
 }

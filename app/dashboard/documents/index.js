@@ -28,29 +28,6 @@ export default function DocumentsPage() {
     { value: 'AUTRE', label: 'Autres', icon: FileText }
   ];
 
-  const declarationTypes = {
-    'PREFECTORALE': { 
-      label: 'Déclaration Préfectorale', 
-      url: 'https://www.service-public.fr/associations/declaration-prefectorale',
-      deadline: '31 décembre'
-    },
-    'FISCAL': { 
-      label: 'Déclaration Fiscale', 
-      url: 'https://www.impots.gouv.fr/portail/particulier/je-declare',
-      deadline: '15 mai'
-    },
-    'SOCIAL': { 
-      label: 'Déclaration Sociale', 
-      url: 'https://www.urssaf.fr/portail/home/associations.html',
-      deadline: '31 janvier'
-    },
-    'STATUTAIRE': { 
-      label: 'Déclaration Statutaire', 
-      url: 'https://www.greffe.fr',
-      deadline: '30 juin'
-    }
-  };
-
   const mockDocuments = [
     {
       id: '1',
@@ -95,7 +72,6 @@ export default function DocumentsPage() {
   ];
 
   useEffect(() => {
-    // Simuler le chargement
     setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -141,7 +117,6 @@ export default function DocumentsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
         <div className="mb-8">
           <div className="flex justify-between items-center">
             <div>
@@ -152,17 +127,13 @@ export default function DocumentsPage() {
                 Gérez vos documents, archivez l'histoire de votre association et suivez vos déclarations obligatoires
               </p>
             </div>
-            <button
-              onClick={() => setShowUpload(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
+            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
               <Upload className="w-5 h-5" />
               Nouveau document
             </button>
           </div>
         </div>
 
-        {/* Filtres */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative">
@@ -195,77 +166,6 @@ export default function DocumentsPage() {
           </div>
         </div>
 
-        {/* Alertes déclarations */}
-        {documents.some(doc => doc.isDeclaration) && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
-            <h3 className="text-lg font-semibold text-yellow-900 mb-4 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5" />
-              Déclarations Obligatoires
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {Object.entries(declarationTypes).map(([type, info]) => {
-                const hasDeclaration = documents.some(doc => doc.declarationType === type);
-                return (
-                  <div key={type} className="flex items-center justify-between p-3 bg-white rounded-lg">
-                    <div className="flex items-center gap-3">
-                      {hasDeclaration ? (
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                      ) : (
-                        <Clock className="w-5 h-5 text-yellow-600" />
-                      )}
-                      <div>
-                        <div className="font-medium text-gray-900">{info.label}</div>
-                        <div className="text-sm text-gray-600">Deadline: {info.deadline}</div>
-                      </div>
-                    </div>
-                    <a
-                      href={info.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      Déclarer
-                    </a>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Timeline mémoire associative */}
-        {documents.some(doc => doc.isMemory) && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-            <h3 className="text-lg font-semibold text-blue-900 mb-4 flex items-center gap-2">
-              <History className="w-5 h-5" />
-              Mémoire de l'Association
-            </h3>
-            <div className="space-y-4">
-              {documents
-                .filter(doc => doc.isMemory)
-                .sort((a, b) => new Date(b.memoryDate) - new Date(a.memoryDate))
-                .map(doc => (
-                  <div key={doc.id} className="flex items-center gap-4 p-3 bg-white rounded-lg">
-                    <div className="flex-shrink-0">
-                      {getCategoryIcon(doc.category)}
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-medium text-gray-900">{doc.title}</div>
-                      <div className="text-sm text-gray-600">
-                        {doc.memoryDate?.toLocaleDateString('fr-FR')}
-                      </div>
-                    </div>
-                    <div className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(doc.category)}`}>
-                      {doc.category}
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
-
-        {/* Liste des documents */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-xl font-semibold text-gray-900">Tous les documents</h2>
@@ -297,7 +197,7 @@ export default function DocumentsPage() {
                           <span>{doc.uploadedAt.toLocaleDateString('fr-FR')}</span>
                           {doc.tags && (
                             <div className="flex items-center gap-2">
-                              <Tag className="w-4 h-4" />
+                              <span className="text-gray-400">#</span>
                               {doc.tags.map(tag => (
                                 <span key={tag} className="text-gray-600">#{tag}</span>
                               ))}
@@ -316,17 +216,6 @@ export default function DocumentsPage() {
                         <FileText className="w-4 h-4" />
                         Voir
                       </a>
-                      {doc.isDeclaration && doc.declarationUrl && (
-                        <a
-                          href={doc.declarationUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-green-600 hover:text-green-800 flex items-center gap-1"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                          Service
-                        </a>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -338,4 +227,3 @@ export default function DocumentsPage() {
     </div>
   );
 }
-

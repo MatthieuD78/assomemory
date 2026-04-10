@@ -10,18 +10,13 @@ import {
   Clock,
   ExternalLink,
   History,
-  AlertTriangle,
-  CheckCircle
+  AlertTriangle
 } from 'lucide-react';
 
 export default function DocumentsPage() {
-  const [documents, setDocuments] = useState([]);
-  const [filteredDocs, setFilteredDocs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('TOUS');
-  const [showUpload, setShowUpload] = useState(false);
 
   const categories = [
     { value: 'TOUS', label: 'Tous les documents', icon: FileText },
@@ -56,105 +51,55 @@ export default function DocumentsPage() {
     }
   };
 
+  const mockDocuments = [
+    {
+      id: '1',
+      title: 'AG Ordinaire 2024',
+      category: 'AG',
+      description: 'Compte-rendu de l\'assemblée générale ordinaire',
+      url: '/uploads/demo/ag-2024.pdf',
+      uploadedAt: new Date('2024-03-15'),
+      isMemory: true,
+      memoryType: 'AG_ANNEE',
+      memoryDate: new Date('2024-03-10'),
+      vectorized: true,
+      tags: ['AG', '2024', 'ordinaire']
+    },
+    {
+      id: '2',
+      title: 'Bilan Comptable 2023',
+      category: 'BILAN',
+      description: 'Bilan et compte de résultat exercice 2023',
+      url: '/uploads/demo/bilan-2023.pdf',
+      uploadedAt: new Date('2024-02-20'),
+      isMemory: true,
+      memoryType: 'BILAN_EXERCICE',
+      memoryDate: new Date('2023-12-31'),
+      vectorized: true,
+      tags: ['bilan', '2023', 'comptabilité']
+    },
+    {
+      id: '3',
+      title: 'Déclaration Préfectorale 2024',
+      category: 'DECLARATION',
+      description: 'Déclaration administrative annuelle en préfecture',
+      url: '/uploads/demo/declaration-prefectorale-2024.pdf',
+      uploadedAt: new Date('2024-01-10'),
+      isDeclaration: true,
+      declarationType: 'PREFECTORALE',
+      declarationUrl: 'https://www.service-public.fr/associations/declaration-prefectorale',
+      declarationDeadline: new Date('2024-12-31'),
+      vectorized: false,
+      tags: ['déclaration', 'préfectorale', '2024']
+    }
+  ];
+
   useEffect(() => {
-    loadDocuments();
+    // Simuler le chargement
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   }, []);
-
-  useEffect(() => {
-    filterDocuments();
-  }, [documents, searchTerm, selectedCategory]);
-
-  const loadDocuments = async () => {
-    try {
-      // TODO: Remplacer par appel API réel
-      const mockDocuments = [
-        {
-          id: '1',
-          title: 'AG Ordinaire 2024',
-          category: 'AG',
-          description: 'Compte-rendu de l\'assemblée générale ordinaire',
-          url: '/uploads/demo/ag-2024.pdf',
-          uploadedAt: new Date('2024-03-15'),
-          isMemory: true,
-          memoryType: 'AG_ANNEE',
-          memoryDate: new Date('2024-03-10'),
-          vectorized: true,
-          tags: ['AG', '2024', 'ordinaire']
-        },
-        {
-          id: '2',
-          title: 'Bilan Comptable 2023',
-          category: 'BILAN',
-          description: 'Bilan et compte de résultat exercice 2023',
-          url: '/uploads/demo/bilan-2023.pdf',
-          uploadedAt: new Date('2024-02-20'),
-          isMemory: true,
-          memoryType: 'BILAN_EXERCICE',
-          memoryDate: new Date('2023-12-31'),
-          vectorized: true,
-          tags: ['bilan', '2023', 'comptabilité']
-        },
-        {
-          id: '3',
-          title: 'Déclaration Préfectorale 2024',
-          category: 'DECLARATION',
-          description: 'Déclaration administrative annuelle en préfecture',
-          url: '/uploads/demo/declaration-prefectorale-2024.pdf',
-          uploadedAt: new Date('2024-01-10'),
-          isDeclaration: true,
-          declarationType: 'PREFECTORALE',
-          declarationUrl: 'https://www.service-public.fr/associations/declaration-prefectorale',
-          declarationDeadline: new Date('2024-12-31'),
-          vectorized: false,
-          tags: ['déclaration', 'préfectorale', '2024']
-        }
-      ];
-      
-      setDocuments(mockDocuments);
-      setLoading(false);
-    } catch (error) {
-      console.error('Erreur chargement documents:', error);
-      setLoading(false);
-    }
-  };
-
-  const filterDocuments = () => {
-    let filtered = documents;
-
-    // Filtrage par catégorie
-    if (selectedCategory !== 'TOUS') {
-      filtered = filtered.filter(doc => doc.category === selectedCategory);
-    }
-
-    // Filtrage par recherche
-    if (searchTerm) {
-      filtered = filtered.filter(doc => 
-        doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        doc.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        doc.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-      );
-    }
-
-    setFilteredDocs(filtered);
-  };
-
-  const handleUpload = async (formData) => {
-    setUploading(true);
-    try {
-      // TODO: Appel API upload
-      console.log('Upload document:', formData);
-      
-      // Simuler l'upload
-      setTimeout(() => {
-        setShowUpload(false);
-        setUploading(false);
-        loadDocuments();
-      }, 2000);
-    } catch (error) {
-      console.error('Erreur upload:', error);
-      setUploading(false);
-    }
-  };
 
   const getCategoryIcon = (category) => {
     const cat = categories.find(c => c.value === category);
@@ -172,6 +117,15 @@ export default function DocumentsPage() {
     };
     return colors[category] || 'bg-gray-100 text-gray-800';
   };
+
+  const filteredDocs = mockDocuments.filter(doc => {
+    const matchesCategory = selectedCategory === 'TOUS' || doc.category === selectedCategory;
+    const matchesSearch = !searchTerm || 
+      doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    return matchesCategory && matchesSearch;
+  });
 
   if (loading) {
     return (
@@ -380,38 +334,6 @@ export default function DocumentsPage() {
             })}
           </div>
         </div>
-
-        {/* Modal Upload simplifiée */}
-        {showUpload && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-gray-900">Nouveau document</h2>
-                <button
-                  onClick={() => setShowUpload(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  ✕
-                </button>
-              </div>
-
-              <div className="text-center py-8">
-                <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600 mb-4">Upload de documents bientôt disponible</p>
-                <p className="text-sm text-gray-500">Fonctionnalité en cours de développement</p>
-              </div>
-
-              <div className="flex justify-end">
-                <button
-                  onClick={() => setShowUpload(false)}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
-                >
-                  Fermer
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

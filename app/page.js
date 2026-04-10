@@ -34,6 +34,21 @@ export default function HomePage() {
           </Link>
 
           <Link 
+            href="/dashboard/documents"
+            className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+          >
+            <div className="flex flex-col items-center text-center">
+              <FileText className="w-10 h-10 text-purple-500 mb-3" />
+              <h3 className="text-base font-semibold text-gray-900 mb-2">
+                Documents
+              </h3>
+              <p className="text-sm text-gray-600">
+                Gérez votre mémoire et déclarations
+              </p>
+            </div>
+          </Link>
+
+          <Link 
             href="/dashboard/dons/nouveau"
             className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
           >
@@ -62,18 +77,6 @@ export default function HomePage() {
               </p>
             </div>
           </Link>
-
-          <div className="bg-white rounded-xl shadow-lg p-6 opacity-75">
-            <div className="flex flex-col items-center text-center">
-              <FileText className="w-10 h-10 text-gray-400 mb-3" />
-              <h3 className="text-base font-semibold text-gray-900 mb-2">
-                Documents
-              </h3>
-              <p className="text-sm text-gray-600">
-                Gestion documentaire (bientôt disponible)
-              </p>
-            </div>
-          </div>
         </div>
 
         <div className="text-center mt-16">

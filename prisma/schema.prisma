@@ -35,11 +35,32 @@ model Document {
   id            String   @id @default(uuid())
   title         String
   type          String
+  category      String   // "AG", "BILAN", "PROJET", "DECLARATION", "CONTRAT", "AUTRE"
+  description   String?  // Description du document
   url           String
+  fileName      String?  // Nom original du fichier
+  fileSize      Int?     // Taille du fichier en octets
+  mimeType      String?  // Type MIME du fichier
   associationId String
   association   Association @relation(fields: [associationId], references: [id])
   uploadedAt    DateTime @default(now())
   vectorized    Boolean  @default(false)
+  
+  // Mémoire associative
+  isMemory      Boolean  @default(false)
+  memoryDate    DateTime? // Date de l'événement (ex: date de l'AG)
+  memoryType    String?  // "AG_ANNEE", "BILAN_EXERCICE", "PROJET_ANNEE"
+  
+  // Déclarations obligatoires
+  isDeclaration Boolean  @default(false)
+  declarationType String? // "PREFECTORALE", "FISCAL", "SOCIAL", "STATUTAIRE"
+  declarationUrl String? // Lien vers service officiel
+  declarationDeadline DateTime? // Date limite
+  
+  // Métadonnées
+  tags          String[] // Tags pour recherche
+  isPublic      Boolean  @default(false) // Visible sur page publique
+  isArchived    Boolean  @default(false)
 }
 
 model ChatMessage {

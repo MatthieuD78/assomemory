@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MessageCircle, FileText, Users } from 'lucide-react'
+import { MessageCircle, FileText, Users, Building2, Award } from 'lucide-react'
 
 export default function HomePage() {
   return (
@@ -17,42 +17,60 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           <Link 
             href="/dashboard/assos/chat"
-            className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300"
+            className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
           >
             <div className="flex flex-col items-center text-center">
-              <MessageCircle className="w-12 h-12 text-blue-500 mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Chat Assistant
+              <MessageCircle className="w-10 h-10 text-blue-500 mb-3" />
+              <h3 className="text-base font-semibold text-gray-900 mb-2">
+                Chat IA
               </h3>
-              <p className="text-gray-600">
-                Discutez avec l'IA pour obtenir des réponses sur vos documents
+              <p className="text-sm text-gray-600">
+                Assistant intelligent pour vos questions
               </p>
             </div>
           </Link>
 
-          <div className="bg-white rounded-xl shadow-lg p-8 opacity-75">
+          <Link 
+            href="/dashboard/dons/nouveau"
+            className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+          >
             <div className="flex flex-col items-center text-center">
-              <FileText className="w-12 h-12 text-gray-400 mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Documents
+              <Building2 className="w-10 h-10 text-green-500 mb-3" />
+              <h3 className="text-base font-semibold text-gray-900 mb-2">
+                Don à l'Emploi
               </h3>
-              <p className="text-gray-600">
-                Gérez vos documents associatifs (bientôt disponible)
+              <p className="text-sm text-gray-600">
+                Soutenez l'emploi local avec 60% de réduction d'impôt
               </p>
             </div>
-          </div>
+          </Link>
 
-          <div className="bg-white rounded-xl shadow-lg p-8 opacity-75">
+          <Link 
+            href="/dashboard/dons/suivi"
+            className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+          >
             <div className="flex flex-col items-center text-center">
-              <Users className="w-12 h-12 text-gray-400 mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Membres
+              <Award className="w-10 h-10 text-yellow-500 mb-3" />
+              <h3 className="text-base font-semibold text-gray-900 mb-2">
+                Labels Partenaires
               </h3>
-              <p className="text-gray-600">
-                Gérez les membres de votre association (bientôt disponible)
+              <p className="text-sm text-gray-600">
+                Valorisez vos soutiens et obtenez des labels
+              </p>
+            </div>
+          </Link>
+
+          <div className="bg-white rounded-xl shadow-lg p-6 opacity-75">
+            <div className="flex flex-col items-center text-center">
+              <FileText className="w-10 h-10 text-gray-400 mb-3" />
+              <h3 className="text-base font-semibold text-gray-900 mb-2">
+                Documents
+              </h3>
+              <p className="text-sm text-gray-600">
+                Gestion documentaire (bientôt disponible)
               </p>
             </div>
           </div>

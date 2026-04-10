@@ -16,6 +16,7 @@ model Association {
   updatedAt     DateTime @updatedAt
   users         User[]
   documents     Document[]
+  donations     Donation[]
 }
 
 model User {
@@ -47,4 +48,96 @@ model ChatMessage {
   question      String
   answer        String
   createdAt     DateTime @default(now())
+}
+
+model Company {
+  id            String   @id @default(uuid())
+  name          String
+  siret         String   @unique
+  email         String   @unique
+  address       String
+  contactName   String
+  phone         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  donations     Donation[]
+  companyLabels CompanyLabel[]
+}
+
+model Donation {
+  id            String   @id @default(uuid())
+  amount        Float
+  date          DateTime
+  purpose       String   // "Emploi local", "Projet sportif", etc.
+  status        String   @default("PENDING") // PENDING, CONFIRMED, RECEIVED
+  
+  // Relations
+  companyId     String
+  company       Company   @relation(fields: [companyId], references: [id])
+  associationId String
+  association   Association @relation(fields: [associationId], references: [id])
+  
+  // CERFA généré
+  cerfaUrl      String?
+  cerfaNumber   String?
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model CerfaTemplate {
+  id            String   @id @default(uuid())
+  type          String   // "DON_EMPLOI_LOCAL", "SUBVENTION_CLUB"
+  template      Json     // Structure du CERFA
+  version       String   @default("2024")
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+}
+
+model LabelTier {
+  id          String   @id @default(uuid())
+  name        String   // "Bronze", "Argent", "Or", "Diamant"
+  minDonation Float    // 500, 2000, 5000, 10000
+  minDuration Int?     // null, 1, 2, 3 ans
+  benefits    Json     // Liste des bénéfices
+  badgeUrl    String   // URL badge digital
+  isActive    Boolean  @default(true)
+  companyLabels CompanyLabel[]
+}
+
+model CompanyLabel {
+  id          String   @id @default(uuid())
+  companyId   String
+  company     Company   @relation(fields: [companyId], references: [id])
+  labelTierId String
+  labelTier   LabelTier @relation(fields: [labelTierId], references: [id])
+  
+  // Validations institutionnelles
+  omsValidation    Boolean @default(false)
+  omsValidationDate DateTime?
+  cityValidation   Boolean @default(false)  
+  cityValidationDate DateTime?
+  intercoValidation Boolean @default(false)
+  intercoValidationDate DateTime?
+  
+  // Documents
+  certificateUrl    String?
+  badgeUrl          String?
+  
+  startDate         DateTime @default(now())
+  endDate           DateTime?
+  isActive          Boolean  @default(true)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model LabelEvent {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  type        String   // "Ceremony", "Network", "Press"
+  createdAt   DateTime @default(now())
 }

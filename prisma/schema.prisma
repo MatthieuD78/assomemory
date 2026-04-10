@@ -27,6 +27,7 @@ model User {
   role          String   @default("MEMBER")
   associationId String?
   association   Association? @relation(fields: [associationId], references: [id])
+  chatMessages  ChatMessage[]
   createdAt     DateTime @default(now())
 }
 

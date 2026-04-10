@@ -5,7 +5,6 @@ import {
   Upload, 
   FileText, 
   Calendar, 
-  Tag, 
   Search, 
   Filter,
   Clock,
@@ -382,206 +381,39 @@ export default function DocumentsPage() {
           </div>
         </div>
 
-        {/* Modal Upload */}
+        {/* Modal Upload simplifiée */}
         {showUpload && (
-          <UploadModal
-            onClose={() => setShowUpload(false)}
-            onUpload={handleUpload}
-            uploading={uploading}
-          />
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold text-gray-900">Nouveau document</h2>
+                <button
+                  onClick={() => setShowUpload(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="text-center py-8">
+                <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600 mb-4">Upload de documents bientôt disponible</p>
+                <p className="text-sm text-gray-500">Fonctionnalité en cours de développement</p>
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setShowUpload(false)}
+                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                >
+                  Fermer
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
   );
 }
 
-function UploadModal({ onClose, onUpload, uploading }) {
-  const [formData, setFormData] = useState({
-    title: '',
-    category: 'AUTRE',
-    description: '',
-    isMemory: false,
-    memoryType: '',
-    memoryDate: '',
-    isDeclaration: false,
-    declarationType: '',
-    declarationDeadline: '',
-    tags: [],
-    isPublic: false
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onUpload(formData);
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-900">Nouveau document</h2>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* Informations générales */}
-          <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Informations générales</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Titre *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  placeholder="Ex: AG Ordinaire 2024"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Catégorie *</label>
-                <select
-                  required
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="AG">Assemblée Générale</option>
-                  <option value="BILAN">Bilan & Comptes</option>
-                  <option value="PROJET">Projet</option>
-                  <option value="DECLARATION">Déclaration Obligatoire</option>
-                  <option value="CONTRAT">Contrat</option>
-                  <option value="AUTRE">Autre</option>
-                </select>
-              </div>
-              
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  rows={3}
-                  placeholder="Description du document..."
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Mémoire associative */}
-          <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Mémoire associative</h3>
-            <div className="space-y-4">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={formData.isMemory}
-                  onChange={(e) => setFormData({ ...formData, isMemory: e.target.checked })}
-                  className="mr-2"
-                />
-                Ajouter à la mémoire de l'association
-              </label>
-              
-              {formData.isMemory && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Type de mémoire</label>
-                    <select
-                      value={formData.memoryType}
-                      onChange={(e) => setFormData({ ...formData, memoryType: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="AG_ANNEE">AG de l'année</option>
-                      <option value="BILAN_EXERCICE">Bilan d'exercice</option>
-                      <option value="PROJET_ANNEE">Projet de l'année</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Date de l'événement</label>
-                    <input
-                      type="date"
-                      value={formData.memoryDate}
-                      onChange={(e) => setFormData({ ...formData, memoryDate: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Déclaration obligatoire */}
-          {formData.category === 'DECLARATION' && (
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Déclaration obligatoire</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Type de déclaration</label>
-                  <select
-                    value={formData.declarationType}
-                    onChange={(e) => setFormData({ ...formData, declarationType: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="PREFECTORALE">Déclaration Préfectorale</option>
-                    <option value="FISCAL">Déclaration Fiscale</option>
-                    <option value="SOCIAL">Déclaration Sociale</option>
-                    <option value="STATUTAIRE">Déclaration Statutaire</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Date limite</label>
-                  <input
-                    type="date"
-                    value={formData.declarationDeadline}
-                    onChange={(e) => setFormData({ ...formData, declarationDeadline: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Upload fichier */}
-          <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Fichier</h3>
-            <input
-              type="file"
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png"
-            />
-          </div>
-
-          {/* Actions */}
-          <div className="flex justify-end gap-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
-            >
-              Annuler
-            </button>
-            <button
-              type="submit"
-              disabled={uploading}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-            >
-              {uploading ? 'Upload en cours...' : 'Uploader'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
